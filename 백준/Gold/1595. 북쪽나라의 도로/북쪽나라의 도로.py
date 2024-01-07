@@ -18,10 +18,14 @@ while True:
 def dfs(x, w):
     visited[x] = True
     global point
-    for i in graph[x]:
-        point = max(point, w)
-        if not visited[i[0]]:
-            dfs(i[0], w + i[1])
+    stack.append((x, w))
+    while stack:
+        x, w = stack.pop()
+        for i in graph[x]:
+            point = max(point, w)
+            if not visited[i[0]]:
+                visited[i[0]] = True
+                stack.append((i[0], w+i[1]))
 
 for i in range(1, edge):
     visited = [False] * 10001
