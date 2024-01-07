@@ -1,30 +1,31 @@
-graph = [[] for _ in range(10001)]
-visited = [False] * 10001
-answer = 0
-edge = 0
-cur = 0
+import sys
+input = sys.stdin.readline
 
+graph = [[] for _ in range(10001)] 
+edge = 0
+stack = []
+point = 0
+visited = []
 while True:
-    try:
-        a, b, length = map(int, input().split())
-        graph[a].append((b, length))
-        graph[b].append((a, length))
+    try :
+        a, b, c = map(int, input().split())
+        graph[a].append((b,c))
+        graph[b].append((a,c))
         edge += 1
-    except :
+    except:
         break
 
-def dfs(i, length):
-    global cur
-    cur = max(cur, length)
-    visited[i] = True
-    for point in graph[i]:
-        if not visited[point[0]]:
-            dfs(point[0], length + point[1])
+def dfs(x, w):
+    visited[x] = True
+    global point
+    for i in graph[x]:
+        point = max(point, w)
+        if not visited[i[0]]:
+            dfs(i[0], w + i[1])
 
-for i in range(1, edge+1):
+for i in range(1, edge):
     visited = [False] * 10001
-    length = 0
-    dfs(i, 0)
-    answer = max(answer, cur)
+    w = 0
+    dfs(i , w)
 
-print(answer)
+print(point)
