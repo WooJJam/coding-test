@@ -5,30 +5,24 @@ N = int(input())
 T, M = map(int, input().split())
 L = int(input())
 graph = [[] for _ in range(N+1)]
-# visited = [False] * (N+1)
 INF = int(10e9)
 result = INF
 for _ in range(L):
     # 시작, 끝, 시간, 돈
     s, e, t, m = map(int, input().split())
-
     # 시작(s) -> 끝(e) 까지 가는데 필요한 시간(t), 돈(m)
     graph[s].append((e,t,m))
     graph[e].append((s,t,m))
 
 def dfs(start, time, money):
-    # global visited
-    # visited[start] = True
     global result
     if start == N:
         result = min(result, money)
         return
     # i[0] = 끝, i[1] = 시간, i[2] = 돈
     for i in graph[start]:
-        # if not visited[i[0]]:
         if T < i[1] + time or M < i[2] + money:
             continue
-            # visited = [False] * (N+1)
         else:
             dfs(i[0], i[1]+time, i[2]+money)
 
