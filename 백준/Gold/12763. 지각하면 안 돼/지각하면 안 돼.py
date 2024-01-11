@@ -1,4 +1,4 @@
-import sys
+import sys, heapq
 input = sys.stdin.readline
 sys.setrecursionlimit(10**6)
 N = int(input())
@@ -6,7 +6,7 @@ T, M = map(int, input().split())
 L = int(input())
 graph = [[] for _ in range(N+1)]
 INF = int(10e9)
-result = INF
+distcost = [[INF for _ in range(10_001)] for _ in range(N+1)]
 for _ in range(L):
     # 시작, 끝, 시간, 돈
     s, e, t, m = map(int, input().split())
@@ -14,23 +14,49 @@ for _ in range(L):
     graph[s].append((e,t,m))
     graph[e].append((s,t,m))
 
-def dfs(start, time, money):
-    global result
-    if start == N:
-        result = min(result, money)
-        return
-    # i[0] = 끝, i[1] = 시간, i[2] = 돈
-    for i in graph[start]:
-        if T < i[1] + time or M < i[2] + money:
-            continue
-        else:
-            dfs(i[0], i[1]+time, i[2]+money)
+def dijkstra(start, time, money):
+    global distcost
+    q = []
+    heapq.heappush(q, (time, money, start))
 
-dfs(1,0,0)
-if result == INF :
-    print(-1)
-else:
-    print(result)
+    while q:
+        time, money, start = heapq.heappop(q)
+
+        if distcost[start][money] < time:
+            continue
+
+        for i in graph[start]:
+            costT = time + i[1]
+            costM = money + i[2]
+            if T < costT or M < costM:
+                continue
+            if distcost[i[0]][costM] > costT:
+                heapq.heappush(q, (costT, costM, i[0]))
+                distcost[i[0]][costM] = costT
+
+dijkstra(1,0,0)
+for i in range(M+1):
+    if distcost[N][i] <= T:
+        print(i)
+        exit()
+print(-1)
+# def dfs(start, time, money):
+#     global result
+#     if start == N:
+#         result = min(result, money)
+#         return
+#     # i[0] = 끝, i[1] = 시간, i[2] = 돈
+#     for i in graph[start]:
+#         if T < i[1] + time or M < i[2] + money:
+#             continue
+#         else:
+#             dfs(i[0], i[1]+time, i[2]+money)
+
+# dfs(1,0,0)
+# if result == INF :
+#     print(-1)
+# else:
+#     print(result)
 
 # 5
 # 180 4000
