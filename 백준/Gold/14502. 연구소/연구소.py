@@ -1,4 +1,5 @@
 import sys, copy
+from itertools import combinations
 from collections import deque
 
 input = sys.stdin.readline
@@ -7,19 +8,17 @@ queue = deque([])
 graph = []
 dx = [-1, 0, 1, 0]
 dy = [0, 1, 0, -1]
-virus = []
 answer = 0
 for _ in range(N):
     graph.append(list(map(int, input().split())))
 
-# visited = [[False for _ in range(N)] for _ in range(M)]
-
-def bfs():
+def bfs(copy_graph):
     global answer
-    count = 0
-    for i in range(len(virus)):
-        queue.append([virus[i][0], virus[i][1]])
-    copy_graph = copy.deepcopy(graph)
+    result = 0
+    for i in range(N):
+        for j in range(M):
+            if graph[i][j] == 2:
+                queue.append([i,j])
 
     while queue:
         x, y = queue.popleft()
@@ -35,27 +34,19 @@ def bfs():
     for i in range(N):
         for j in range(M):
             if copy_graph[i][j] == 0:
-                count += 1
-    
-    answer = max(answer, count)
+                result+=1
+    answer = max(answer, result)
 
-def get_virus():
-    for i in range(N):
-        for j in range(M):
-            if graph[i][j] == 2:
-                virus.append([i,j])
+safe_list = []
+for i in range(N):
+    for j in range(M):
+        if graph[i][j] == 0:
+            safe_list.append((i,j))
 
-def make_wall(count):
-    if count == 3:
-        bfs()
-        return
-    for i in range(N):
-        for j in range(M):
-            if graph[i][j] == 0:
-                graph[i][j] = 1
-                make_wall(count+1)
-                graph[i][j] = 0
+for c in combinations(safe_list, 3):
+    copy_graph = copy.deepcopy(graph)
+    for x, y in c:
+        copy_graph[x][y] = 1
+    bfs(copy_graph)
 
-get_virus()
-make_wall(0)
 print(answer)
