@@ -1,5 +1,5 @@
 import sys
-sys.setrecursionlimit(10**7)
+# sys.setrecursionlimit(10**7)
 input = sys.stdin.readline
 
 N, M = map(int, input().split())
@@ -13,6 +13,7 @@ visited = [[False for _ in range(M)] for _ in range(N)]
 
 for _ in range(N):
     graph.append(list(map(int, input().split())))
+max_num = max(map(max, graph))
 result = 0
 
 def dfs(x, y, count, value):
@@ -21,6 +22,11 @@ def dfs(x, y, count, value):
     if count == 4 :
         result = max(result, value)
         return
+    
+    if value + (4 - count) * max_num < result:
+        return
+    # if result >= value + (4-count) * M:
+    #     return
     
     for i in range(3):
         nextX = dx[i] + x
