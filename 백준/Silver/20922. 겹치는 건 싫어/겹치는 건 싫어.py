@@ -1,11 +1,7 @@
-import sys
-input = sys.stdin.readline
 N, K = map(int, input().split())
 arr = list(map(int, input().split()))
 count = [0] * 100_001
-start = 0
-end = start
-answer = 0
+start, end, answer = 0, 0, 0
 for start in range(N):
     while end < N:
         if count[arr[end]] < K:
