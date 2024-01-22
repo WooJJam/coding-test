@@ -1,9 +1,11 @@
 import sys, bisect
+from collections import Counter
 
 input = sys.stdin.readline
 N = int(input())
 arr = list(map(int, input().split()))
 arr.sort()
+cnt_ = Counter(arr)
 answer = 0
 for first in range(N):
     second = first + 1
@@ -18,10 +20,12 @@ for first in range(N):
             if arr[second] == arr[third]:
                 answer += (third - second)
             else:
-                third_left = bisect.bisect_left(arr, arr[third])
-                third_right = bisect.bisect_right(arr, arr[third])
+                answer += cnt_[arr[third]]
+                # third_left = bisect.bisect_left(arr, arr[third])
+                # third_right = bisect.bisect_right(arr, arr[third])
                 # print("!!", arr[first], arr[second], arr[third])
-                answer += third_right - third_left
+                # answer += third_right - third_left
                 # print(arr[second], second, second_right)
             second += 1
+            
 print(answer)
