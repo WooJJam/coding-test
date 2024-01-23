@@ -9,9 +9,9 @@ start = 1
 end = house[N-1]
 answer = 0
 if C == 2:
-    print(house[N-1] - house[0])
+    print(house[-1] - house[0])
     exit()
-while start < end:
+while start <= end:
     mid = (start+end)//2
     dist = house[0]
     count = 1
@@ -23,5 +23,5 @@ while start < end:
         answer = max(answer, mid)
         start = mid + 1
     else:
-        end = mid 
+        end = mid - 1
 print(answer)
