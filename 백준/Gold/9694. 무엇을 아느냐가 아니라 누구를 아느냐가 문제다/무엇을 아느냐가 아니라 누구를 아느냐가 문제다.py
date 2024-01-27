@@ -1,51 +1,45 @@
-import sys
-import heapq
-from collections import deque
-
+import sys, heapq
+input = sys.stdin.readline
+T = int(input())
 INF = sys.maxsize
-t = int(sys.stdin.readline().rstrip())
-for t_num in range(1, t+1):
-    m, n = map(int, sys.stdin.readline().rstrip().split())
-    nodes = [[] for _ in range(n)]
-    for _ in range(m):
-        a, b, c = map(int, sys.stdin.readline().rstrip().split())
-        nodes[a].append([b, c])
-        nodes[b].append([a, c])
-
-    def Dijsktra():
-        distances = [INF for _ in range(n)]
-        distances[0] = 0
-        pq = []
-        heapq.heappush(pq, [0, 0])
-        note = [-1 for _ in range(n)]
-        note[0] = 0
-
-        while pq:
-            cur_cost, cur_node = heapq.heappop(pq)
-
-            if distances[cur_node] < cur_cost: continue
-
-            for next_node, next_cost in nodes[cur_node]:
-                if distances[next_node] > next_cost + cur_cost:
-                    distances[next_node] = next_cost + cur_cost
-                    note[next_node] = cur_node
-                    heapq.heappush(pq, [next_cost + cur_cost, next_node])
-
-        return distances, note
-
-    def path_find():
-        result = []
-        cursor = n-1
-        while cursor != 0:
-            result.append(cursor)
-            cursor = note[cursor]
-        result.append(cursor)
-        result.reverse()
-        return result
-
-    distances, note = Dijsktra()
-    if distances[n-1] == INF: result = [-1]
-    else: result = path_find()
-
-    print(f"Case #{t_num}:", end=' ')
-    print(*result, sep=' ')
+def dijkstra(start, z):
+    global M, path, ship
+    q = []
+    heapq.heappush(q,(z, start))
+    ship[start] = 0
+    path[0] = 0
+    while q:
+        dist, now = heapq.heappop(q)
+        if ship[now] < dist:
+            continue
+        for i in graph[now]:
+            cost = dist + i[1]
+            if cost < ship[i[0]]:
+                ship[i[0]] = cost
+                path[i[0]] = now
+                heapq.heappush(q,(cost, i[0]))
+caseCount = 1
+for _ in range(T):
+    N,M = map(int,input().split())
+    graph = [[] for _ in range(M)]
+    path = [-1 for _ in range(M)]
+    ship = [INF] * (M+1)
+    answer = []
+    for _ in range(N):
+        x,y,z = map(int, input().split())
+        graph[x].append((y,z))
+        graph[y].append((x,z))
+    dijkstra(0, 0)
+    index = M - 1
+    answer = []
+    if ship[index] == INF:
+        answer.append(-1)
+    else:
+        answer.append(M-1)
+        while index != 0:
+            answer.append(path[index])
+            index = path[index]
+        answer.reverse()
+    print(f"Case #{caseCount}:", end=' ')
+    print(*answer, sep=' ')
+    caseCount+=1
