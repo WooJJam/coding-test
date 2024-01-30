@@ -11,7 +11,7 @@ def find(parent, x):
 
 # 두 원소가 속한 집합을 합치기
 def union(parent, a, b):
-    a = find(parent, a, b)
+    a = find(parent, a)
     b = find(parent, b)
     if a < b:
         parent[b] = a
