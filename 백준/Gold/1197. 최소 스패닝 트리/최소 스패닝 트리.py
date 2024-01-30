@@ -9,8 +9,6 @@ def find(parent, x):
     return parent[x]
 
 def union(parent, a, b):
-    a = find(parent, a)
-    b = find(parent, b)
     if a < b:
         parent[b] = a
     else:
@@ -28,7 +26,9 @@ graph.sort()
 answer = 0
 for i in range(len(graph)):
     w, s, e = graph[i]
-    if find(parent, s) != find(parent, e):
+    findS = find(parent, s)
+    findE = find(parent, e)
+    if findS != findE:
         answer += w
-        union(parent, s, e)
+        union(parent, findS, findE)
 print(answer)
