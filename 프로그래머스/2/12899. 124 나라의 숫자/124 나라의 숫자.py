@@ -1,15 +1,8 @@
 def solution(n):
     answer = ''
-    
+    num = ['1','2','4']
     while n > 0:
-        if n % 3 == 1:
-            answer = '1' + answer
-            n = n // 3
-        elif n % 3 == 2:
-            answer = '2' + answer
-            n = n // 3
-        else:
-            answer = '4' + answer
-            n = (n // 3) -1
-        
+        n -= 1
+        answer = num[n%3] + answer
+        n //= 3
     return answer
