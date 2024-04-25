@@ -21,7 +21,7 @@ def dfs(i,j, stone):
                 nextX += dx[k]
                 nextY += dy[k]
 
-                if 0 <= prevX <= 18 and 0 <= prevY <= 18 and graph[prevX][prevY] == stone:
+                if 0 <= prevX and 0 <= prevY and graph[prevX][prevY] == stone:
                     break
                 if 0 <= nextX <= 18 and 0 <= nextY <= 18 and graph[nextX][nextY] == stone:
                     break
