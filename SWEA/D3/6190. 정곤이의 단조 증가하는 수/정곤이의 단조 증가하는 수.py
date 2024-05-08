@@ -19,10 +19,11 @@ for test_case in range(1, T+1):
     for i in range(N-1):
         for j in range(i+1, N):
             value = number[i] * number[j]
-            if answer > value:
+            if answer < value:
+                if check(value):
+                    answer = value
+                    break
+            else:
                 break
-            
-            if check(value):
-                answer = value
 
     print(f"#{test_case} {answer}")
