@@ -4,9 +4,9 @@ P = []
 
 def dfs(time, price):
     global answer
-    answer = max(answer, price)
 
     if time >= N:
+        answer = max(answer, price)
         return
 
     dfs(time+1, price)
