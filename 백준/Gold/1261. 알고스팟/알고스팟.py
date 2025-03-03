@@ -16,15 +16,11 @@ def solve(i, j):
         for i in range(4):
             nextY = dy[i] + y
             nextX = dx[i] + x
-            dist = cost
             if (0 <= nextY < M and 0 <= nextX < N): # 범위내에 있다면 이동 가능
-                if miro[nextY][nextX] == 1:
-                    dist += 1
 
-                if distance[nextY][nextX] > dist:
-                    # print(nextY, nextX, cost)
-                    distance[nextY][nextX] = dist
-                    heapq.heappush(q, (nextY, nextX, dist))
+                if distance[nextY][nextX] > miro[nextY][nextX] + cost:
+                    distance[nextY][nextX] = miro[nextY][nextX] + cost
+                    heapq.heappush(q, (nextY, nextX, miro[nextY][nextX] + cost))
 
 input = sys.stdin.readline
 
