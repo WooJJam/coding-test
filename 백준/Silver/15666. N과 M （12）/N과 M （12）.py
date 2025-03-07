@@ -1,21 +1,22 @@
 import sys
-from itertools import product
-
+sys.setrecursionlimit(10**7)
 input = sys.stdin.readline
 
 N, M = map(int, input().split())
-array = list(map(int, input().split()))
+array = list(set(map(int, input().split())))
 array.sort()
 
 answer = []
 
-for number in product(array, repeat = M):
-    for j in range(M-1):
-        if number[j] > number[j+1]:
-            break
+def dfs(depth):
+    if depth == M:
+        print(*answer)
+        return
     else:
-        if number not in answer:
-            answer.append(number)
+        for i in range(len(array)):
+            if depth == 0 or answer[-1] <= array[i]:
+                answer.append(array[i])
+                dfs(depth+1)
+                answer.pop()
 
-for number in answer:
-    print(" ".join(map(str, number)))
+dfs(0)
