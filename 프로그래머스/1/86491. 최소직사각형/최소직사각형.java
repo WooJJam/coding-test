@@ -1,4 +1,5 @@
 import java.util.*;
+import java.lang.*;
 
 class Solution {
     public int solution(int[][] sizes) {
@@ -8,21 +9,13 @@ class Solution {
     
     static int solve(int[][] sizes) {
 
-		List<Integer> h = new ArrayList<>();
-		List<Integer> w = new ArrayList<>();
+        int w = 0, h = 0;
 		for (int i = 0; i < sizes.length; i++) {
-			if (sizes[i][0] > sizes[i][1]) {
-				w.add(sizes[i][0]);
-				h.add(sizes[i][1]);
-			} else {
-				w.add(sizes[i][1]);
-				h.add(sizes[i][0]);
-			}
+			w = Math.max(w, Math.max(sizes[i][0], sizes[i][1]));
+            h = Math.max(h, Math.min(sizes[i][0], sizes[i][1]));
 		}
 
-		h.sort(Comparator.reverseOrder());
-		w.sort(Comparator.reverseOrder());
 
-		return h.get(0) * w.get(0);
+		return w * h;
 	}
 }
