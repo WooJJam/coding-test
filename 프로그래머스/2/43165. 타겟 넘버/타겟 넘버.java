@@ -28,7 +28,7 @@ class Solution {
                 }
             } else {
                 q.offer(new int[]{pos + numbers[count], count + 1});
-                q.offer(new int[]{pos + (numbers[count] * -1), count + 1 });
+                q.offer(new int[]{pos - numbers[count], count + 1 });
                 }
         }
         
