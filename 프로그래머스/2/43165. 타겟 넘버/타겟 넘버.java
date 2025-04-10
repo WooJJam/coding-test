@@ -6,7 +6,8 @@ class Solution {
     
     public int solution(int[] numbers, int target) {
 
-        return bfs(target, numbers);
+        return dfs(numbers, target, 0, 0);
+        // return bfs(target, numbers);
     }
     
     static int bfs(int target, int[] numbers) {
@@ -33,5 +34,18 @@ class Solution {
         }
         
         return answer;
+    }
+    
+    static int dfs(int[] numbers, int target, int cur, int depth) {
+        
+        if (depth == numbers.length) {
+            if (cur == target) {
+                return 1;
+            }
+            return 0;
+        }
+        
+        return dfs(numbers, target, cur + numbers[depth], depth + 1) 
+            + dfs(numbers, target, cur - numbers[depth], depth + 1);
     }
 }
