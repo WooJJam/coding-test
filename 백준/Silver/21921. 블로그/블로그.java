@@ -6,7 +6,6 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st;
 
 		st = new StringTokenizer(br.readLine());
@@ -35,13 +34,8 @@ public class Main {
 
 		int max = 0;
 		int count = 0;
-
-		// for (int i = 0; i <= N; i++) {
-		// 	System.out.println("sum[i] = " + sum[i]);
-		// }
-		// System.out.println("max = " + max);
+		
 		for (int i = 0; i + X <= N; i++) {
-			// System.out.println("i = " + i);
 			int result = sum[i + X] - sum[i];
 
 			if (max != 0 && max == result) {
@@ -52,15 +46,6 @@ public class Main {
 				max = result;
 				count = 1;
 			}
-
-			// System.out.println("i = " + i);
-			// System.out.println("i + X = " + (i + X));
-			//
-			// System.out.println("max = " + max);
-			// System.out.println("result = " + result);
-			// System.out.println("count = " + count);
-			// System.out.println("======");
-
 		}
 
 		if (max == 0) {
