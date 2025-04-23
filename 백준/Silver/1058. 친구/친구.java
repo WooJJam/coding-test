@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Main {
 
-	static boolean[] visited;
+	static int[][] distance;
 
 	public static void main(String[] args) throws IOException {
 
@@ -14,58 +14,48 @@ public class Main {
 		int N = Integer.parseInt(br.readLine());
 
 		String friends[][] = new String[N][N];
+		distance = new int[N][N];
+
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				distance[i][j] = 0;
+			}
+		}
 
 		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
 			friends[i] = st.nextToken().split("");
 		}
 
+		solve(friends, N);
+
 		int answer = 0;
 
 		for (int i = 0; i < N; i++) {
-			visited = new boolean[N];
-			answer = Math.max(answer, bfs(i, friends, N));
+			int sum = 0;
+			for (int j = 0; j < N; j++) {
+				sum += distance[i][j];
+			}
+			answer = Math.max(sum, answer);
 		}
+
 		System.out.print(answer);
+
 	}
 
-	static int bfs(int start, String[][] friends, int N) {
+	static void solve(String friends[][], int N) {
 
-		Queue<Integer> q = new LinkedList<>();
-
-		// System.out.println("start = " + start);
-		// System.out.println("depth = " + depth);
-		// System.out.println();
-
-		int count = 0;
-		int depth = 0;
-		q.offer(start);
-		visited[start] = true;
-
-		while(depth < 2) {
-			int size = q.size();
-			for (int i = 0; i < size; i++) {
-				int index = q.poll();
+		for (int k = 0; k < N; k++) {
+			for (int i = 0; i < N; i++) {
 				for (int j = 0; j < N; j++) {
-					if (friends[index][j].equals("Y") && !visited[j]) {
-						count++;
-						visited[j] = true;
-						q.offer(j);
+					if (i == j) {
+						continue;
+					}
+					if (friends[i][j].equals("Y") || (friends[i][k].equals("Y")) && friends[k][j].equals("Y")) {
+						distance[i][j] = 1;
 					}
 				}
 			}
-
-			depth++;
 		}
-
-		return count;
 	}
 }
-
-// 6
-// NYYNYN
-// YNYNNN
-// YYNYNN
-// NNYNNN
-// YNNNNY
-// NNNNYN
