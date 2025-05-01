@@ -89,14 +89,9 @@ public class Main {
 					push = (num / 10) + (num % 10) * 1000;
 					markVisited(push, order + "R", q);
 				}
-
-				if (!visited[push]) {
-					q.offer(new QueueType(push, answer));
-				}
 			}
 		}
 
 		return answer;
-
-	}
+    }
 }
