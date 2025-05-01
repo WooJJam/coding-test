@@ -33,65 +33,58 @@ public class Main {
 		bw.close();
 	}
 
-	static class QueueType {
-		int num;
-		String answer;
-
-		public QueueType(final int num, final String answer) {
-			this.num = num;
-			this.answer = answer;
-		}
-	}
-
-	static void markVisited(int num, String order, Queue<QueueType> queue) {
-		if (!visited[num]) {
-			visited[num] = true;
-			queue.offer(new QueueType(num, order));
-		}
-	}
-
 	static String bfs(int A, int B) {
 		String answer = "";
-		Queue<QueueType> q = new LinkedList<>();
+		String[] command = new String[10_000];
+		Queue<Integer> q = new LinkedList<>();
 
-		q.offer(new QueueType(A, answer));
+		q.offer(A);
+		command[A] = "";
 
+		int d, s, l, r;
 		while (!q.isEmpty()) {
-			int push = 0;
-			QueueType queueType = q.poll();
-			int num = queueType.num;
-			String order = queueType.answer;
-
-			visited[num] = true;
+			int num = q.poll();
 
 			if (num == B) {
-				answer = order;
+				answer = command[num];
 				break;
 			}
 
 			for (String operation : operations) {
 				if (operation.equals("D")) {
-					push = (num * 2) % 10000;
-					markVisited(push, order + "D", q);
+					d = (num * 2) % 10000;
+					if (command[d] == null) {
+						command[d] = command[num] + "D";
+						q.offer(d);
+					}
 				}
 
 				if (operation.equals("S")) {
-					push = (num + 9999) % 10000;
-					markVisited(push, order + "S", q);
+					s = (num + 9999) % 10000;
+					if (command[s] == null) {
+						command[s] = command[num] + "S";
+						q.offer(s);
+					}
 				}
 
 				if (operation.equals("L")) {
-					push = (num % 1000) * 10 + num / 1000;
-					markVisited(push, order + "L", q);
+					l = (num % 1000) * 10 + num / 1000;
+					if (command[l] == null) {
+						command[l] = command[num] + "L";
+						q.offer(l);
+					}
 				}
 
 				if (operation.equals("R")) {
-					push = (num / 10) + (num % 10) * 1000;
-					markVisited(push, order + "R", q);
+					r = (num / 10) + (num % 10) * 1000;
+					if (command[r] == null) {
+						command[r] = command[num] + "R";
+						q.offer(r);
+					}
 				}
 			}
 		}
 
 		return answer;
-    }
+	}
 }
