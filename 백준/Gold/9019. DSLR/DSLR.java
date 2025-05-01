@@ -50,38 +50,28 @@ public class Main {
 				break;
 			}
 
-			for (String operation : operations) {
-				if (operation.equals("D")) {
-					d = (num * 2) % 10000;
-					if (command[d] == null) {
-						command[d] = command[num] + "D";
-						q.offer(d);
-					}
-				}
+			d = (num * 2) % 10000;
+			if (command[d] == null) {
+				command[d] = command[num] + "D";
+				q.offer(d);
+			}
 
-				if (operation.equals("S")) {
-					s = (num + 9999) % 10000;
-					if (command[s] == null) {
-						command[s] = command[num] + "S";
-						q.offer(s);
-					}
-				}
+			s = (num + 9999) % 10000;
+			if (command[s] == null) {
+				command[s] = command[num] + "S";
+				q.offer(s);
+			}
 
-				if (operation.equals("L")) {
-					l = (num % 1000) * 10 + num / 1000;
-					if (command[l] == null) {
-						command[l] = command[num] + "L";
-						q.offer(l);
-					}
-				}
+			l = (num % 1000) * 10 + num / 1000;
+			if (command[l] == null) {
+				command[l] = command[num] + "L";
+				q.offer(l);
+			}
 
-				if (operation.equals("R")) {
-					r = (num / 10) + (num % 10) * 1000;
-					if (command[r] == null) {
-						command[r] = command[num] + "R";
-						q.offer(r);
-					}
-				}
+			r = (num / 10) + (num % 10) * 1000;
+			if (command[r] == null) {
+				command[r] = command[num] + "R";
+				q.offer(r);
 			}
 		}
 
