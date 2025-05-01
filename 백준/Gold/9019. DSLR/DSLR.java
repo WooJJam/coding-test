@@ -18,10 +18,10 @@ public class Main {
 
 		for (int i = 0; i < T; i++) {
 
-			String[] input = br.readLine().split(" ");
+			st = new StringTokenizer(br.readLine());
 
-			int A = Integer.parseInt(input[0]);
-			int B = Integer.parseInt(input[1]);
+			int A = Integer.parseInt(st.nextToken());
+			int B = Integer.parseInt(st.nextToken());
 
 			visited = new boolean[10_000];
 
@@ -43,7 +43,7 @@ public class Main {
 		}
 	}
 
-	static void markVisited(int num, String order, Queue<QueueType> queue){
+	static void markVisited(int num, String order, Queue<QueueType> queue) {
 		if (!visited[num]) {
 			visited[num] = true;
 			queue.offer(new QueueType(num, order));
@@ -97,5 +97,6 @@ public class Main {
 		}
 
 		return answer;
+
 	}
 }
