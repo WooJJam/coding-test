@@ -4,9 +4,8 @@ import java.util.*;
 
 public class Main {
 
-	static int[][] game = new int[100_000][3];
-	static int[][] dp_max = new int[100_000][3];
-	static int[][] dp_min = new int[100_000][3];
+	static int[] dp_max = {0, 0, 0};
+	static int[] dp_min = {0, 0, 0};
 
 	public static void main(String[] args) throws IOException {
 
@@ -19,47 +18,40 @@ public class Main {
 
 		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
-			for (int j = 0; j < 3; j++) {
-				int point = Integer.parseInt(st.nextToken());
-				game[i][j] = point;
-			}
-		}
-		int[] answers = dynamic(N);
+			int left = Integer.parseInt(st.nextToken());
+			int middle = Integer.parseInt(st.nextToken());
+			int right = Integer.parseInt(st.nextToken());
 
-		bw.write(answers[0] + " " + answers[1] + "\n");
+			if (i == 0) {
+				dp_max[0] = dp_min[0] = left;
+				dp_max[1] = dp_min[1] = middle;
+				dp_max[2] = dp_min[2] = right;
+			} else {
+				dynamic(left, middle, right);
+				}
+		}
+
+		bw.write(Arrays.stream(dp_max).max().getAsInt() + " ");
+		bw.write(Arrays.stream(dp_min).min().getAsInt() + "\n");
 		bw.flush();
 		bw.close();
 	}
 
-	static int[] dynamic(int N) {
+	static void dynamic(int left, int middle, int right) {
 
-		dp_max[0][0] = dp_min[0][0] = game[0][0];
-		dp_max[0][1] = dp_min[0][1] = game[0][1];
-		dp_max[0][2] = dp_min[0][2] = game[0][2];
-		
-		for (int i = 1; i < N; i++) {
-			for (int j = 0; j < 3; j++) {
-				if (j == 0) {
-					dp_max[i][j] = Math.max(dp_max[i - 1][j], dp_max[i - 1][j + 1]) + game[i][j];
-					dp_min[i][j] = Math.min(dp_min[i - 1][j], dp_min[i - 1][j + 1]) + game[i][j];
-				}
+		int before_max_0 = dp_max[0];
+		int before_max_1 = dp_max[1];
 
-				if (j == 1) {
-					dp_max[i][j] = Math.max(Math.max(dp_max[i - 1][j - 1], dp_max[i - 1][j]), dp_max[i - 1][j + 1]) + game[i][j];
-					dp_min[i][j] = Math.min(Math.min(dp_min[i - 1][j - 1], dp_min[i - 1][j]), dp_min[i - 1][j + 1]) + game[i][j];
-				}
+		dp_max[0] = Math.max(dp_max[0], dp_max[1]) + left;
+		dp_max[1] = Math.max(Math.max(before_max_0, dp_max[1]), dp_max[2]) + middle;
+		dp_max[2] = Math.max(before_max_1, dp_max[2]) + right;
 
-				if (j == 2) {
-					dp_max[i][j] = Math.max(dp_max[i - 1][j - 1], dp_max[i - 1][j]) + game[i][j];
-					dp_min[i][j] = Math.min(dp_min[i - 1][j - 1], dp_min[i - 1][j]) + game[i][j];
-				}
-			}
-		}
+		int before_min_0 = dp_min[0];
+		int before_min_1 = dp_min[1];
 
-		int max = Arrays.stream(dp_max[N - 1]).max().getAsInt();
-		int min = Arrays.stream(dp_min[N - 1]).min().getAsInt();
-
-		return new int[]{max, min};
+		dp_min[0] = Math.min(dp_min[0], dp_min[1]) + left;
+		dp_min[1] = Math.min(Math.min(before_min_0, dp_min[1]), dp_min[2]) + middle;
+		dp_min[2] = Math.min(before_min_1, dp_min[2]) + right;
 
 	}
 }
