@@ -4,6 +4,10 @@ import java.util.*;
 
 public class Main {
 
+	static int[][] game = new int[100_000][3];
+	static int[][] dp_max = new int[100_000][3];
+	static int[][] dp_min = new int[100_000][3];
+
 	public static void main(String[] args) throws IOException {
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -13,11 +17,6 @@ public class Main {
 
 		int N = Integer.parseInt(br.readLine());
 
-		int[][] game = new int[N][3];
-		int[][] dp_max = new int[N][3];
-		int[][] dp_min = new int[N][3];
-
-
 		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < 3; j++) {
@@ -25,15 +24,14 @@ public class Main {
 				game[i][j] = point;
 			}
 		}
-		List<Integer> answers = dynamic(game, dp_max, dp_min, N);
+		int[] answers = dynamic(N);
 
-		System.out.println(answers.get(0) +" " + answers.get(1));
-
+		bw.write(answers[0] + " " + answers[1] + "\n");
 		bw.flush();
 		bw.close();
 	}
 
-	static List<Integer> dynamic(int[][] game, int[][] dp_max, int[][] dp_min, int N) {
+	static int[] dynamic(int N) {
 
 		dp_max[0][0] = dp_min[0][0] = game[0][0];
 		dp_max[0][1] = dp_min[0][1] = game[0][1];
@@ -60,7 +58,8 @@ public class Main {
 
 		int max = Arrays.stream(dp_max[N - 1]).max().getAsInt();
 		int min = Arrays.stream(dp_min[N - 1]).min().getAsInt();
-		return List.of(max, min);
+
+		return new int[]{max, min};
 
 	}
 }
