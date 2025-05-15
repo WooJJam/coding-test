@@ -26,7 +26,7 @@ public class Main {
 			int B = Integer.parseInt(st.nextToken());
 			int C = Integer.parseInt(st.nextToken());
 
-			graph.add(new Node(B, A, C));
+			graph.add(new Node(A, B, C));
 		}
 
 		bellman_ford(N, M);
@@ -43,10 +43,10 @@ public class Main {
 				int in = node.in;
 				int out = node.out;
 				int cost = node.cost;
-				long D = distinct[out] + cost;
+				long D = distinct[in] + cost;
 
-				if (distinct[out] != MAX && distinct[in] > D) {
-					distinct[in] = D;
+				if (distinct[in] != MAX && distinct[out] > D) {
+					distinct[out] = D;
 					if (i == N) {
 						System.out.println(-1);
 						return;
