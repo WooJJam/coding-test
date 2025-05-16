@@ -34,7 +34,7 @@ class Solution {
             }
         }
         
-        mineralsCount.sort((m1, m2) -> Integer.compare(m2.stoneCnt, m1.stoneCnt));
+        mineralsCount.sort((m1, m2) -> m2.stoneCnt - m1.stoneCnt);
     }
     
     static void calculateTired(String mineral, M m) {
