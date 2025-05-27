@@ -45,9 +45,7 @@ public class Main {
 				rightMax = Math.max(rain[k], rightMax);
 			}
 
-			int amount = Math.min(leftMax, rightMax);
-
-			answer += amount - rain[i];
+			answer += Math.min(leftMax, rightMax) - rain[i];
 		}
 	}
 }
