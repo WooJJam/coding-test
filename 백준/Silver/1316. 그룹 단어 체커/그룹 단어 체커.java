@@ -22,29 +22,32 @@ public class Main {
 
 	private static void solve(String input) {
 
-		Map<Character, Boolean> checker = new HashMap<>();
-
-		for (char i = 'a'; i <= 'z'; i++) {
-			checker.put(i, false);
-		}
+		boolean[] checker = new boolean[26];
 
 		for (int i = 0; i < input.length() - 1; i++) {
 			char first = input.charAt(i);
 			char second = input.charAt(i + 1);
 
-			checker.put(first, true);
+			checker[first - 'a'] = true;
 
-			// 연속된 문자가 같지 않다면 그룹 단어인지 검증해야함
-			if (first != second) {
-				if (checker.get(second)) {
-					return;
-				}
-
-				checker.put(second, true);
+			if (!check(first, second, checker)) {
+				return;
 			}
-
 		}
 
 		answer += 1;
+	}
+
+	// 연속된 문자가 같지 않다면 그룹 단어인지 검증해야함
+	private static boolean check(char first, char second, boolean[] checker) {
+		if (first != second) {
+			if (checker[second - 'a']) {
+				return false;
+			}
+
+			checker[second - 'a'] = true;
+		}
+
+		return true;
 	}
 }
