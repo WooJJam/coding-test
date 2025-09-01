@@ -1,68 +1,70 @@
-import java.util.*;
-import java.io.*;
-import java.lang.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 public class Main {
 
-	static int[] nx = {-1, 0, 1, 0};
-	static int[] ny = {0, 1, 0, -1};
+	static int[] dx = {-1, 0, 1, 0};
+	static int[] dy = {0, 1, 0, -1};
+	static boolean[][] visited;
 	static int answer = 0;
 
 	public static void main(String[] args) throws IOException {
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringTokenizer st;
 
-		String[] inputs = br.readLine().split(" ");
-		int N = Integer.parseInt(inputs[0]);
-		int M = Integer.parseInt(inputs[1]);
+		st = new StringTokenizer(br.readLine());
 
-		char[][] school = new char[N+1][M+1];
-		int startX = 0;
-		int startY = 0;
+		int N = Integer.parseInt(st.nextToken());
+		int M = Integer.parseInt(st.nextToken());
+
+		char[][] campus = new char[N][M];
+		visited = new boolean[N][M];
 
 		for (int i = 0; i < N; i++) {
-			String line = br.readLine();
+			st = new StringTokenizer(br.readLine());
+			String line = st.nextToken();
+
 			for (int j = 0; j < M; j++) {
-				school[i][j] = line.charAt(j);
-				if (school[i][j] == 'I') {
-					startX = i;
-					startY = j;
+				campus[i][j] = line.charAt(j);
+			}
+		}
+
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				if (campus[i][j] == 'I') {
+					dfs(campus, i, j, N, M);
 				}
 			}
 		}
 
-		boolean[][] visited = new boolean[N][M];
-
-		dfs(startX, startY, N, M, visited, school);
-
-		if (answer == 0) {
-			bw.write("TT\n");
+		if (answer > 0) {
+			System.out.println(answer);
 		} else {
-			bw.write(answer + "\n");
+			System.out.println("TT");
 		}
-
-		bw.flush();
-		bw.close();
 	}
 
-	static void dfs(int x, int y, int N, int M, boolean[][] visited, char[][] school) {
-
-		if (school[x][y] == 'P') {
-			answer += 1;
-		}
+	private static void dfs(char[][] campus, int x, int y, int N, int M) {
 
 		visited[x][y] = true;
 
-		for (int i = 0; i < 4; i++) {
-			int nextX = x + nx[i];
-			int nextY = y + ny[i];
+		if (campus[x][y] == 'P') {
+			answer += 1;
+		}
 
-			if (0 <= nextX && nextX < N
-				&& 0 <= nextY && nextY < M
-				&& !visited[nextX][nextY]
-				&& school[nextX][nextY] != 'X') {
-				dfs(nextX, nextY, N, M, visited, school);
+		for (int i = 0; i < 4; i++) {
+			int nextX = x + dx[i];
+			int nextY = y + dy[i];
+
+			if (0 <= nextX && nextX < N && 0 <= nextY && nextY < M && !visited[nextX][nextY] && campus[nextX][nextY] != 'X') {
+				dfs(campus, nextX, nextY, N, M);
 			}
 		}
 	}
