@@ -1,70 +1,81 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.PriorityQueue;
+import java.util.StringTokenizer;
 
 public class Main {
 
-	static Map<Integer, Integer> answer = new HashMap<>();
+	private static int minus = 0;
+	private static int zero = 0;
+	private static int plus = 0;
 
 	public static void main(String[] args) throws IOException {
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st;
 
 		int N = Integer.parseInt(br.readLine());
 
-		int[][] arr = new int[N][N];
+		int[][] paper = new int[N][N];
 
 		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
 
 			for (int j = 0; j < N; j++) {
-				arr[i][j] = Integer.parseInt(st.nextToken());
+				paper[i][j] = Integer.parseInt(st.nextToken());
 			}
 		}
 
-		init();
-		solve(arr, 0, 0, N);
+		div(paper, 0, 0, N);
 
-		System.out.println(answer.get(-1));
-		System.out.println(answer.get(0));
-		System.out.print(answer.get(1));
+		System.out.println(minus);
+		System.out.println(zero);
+		System.out.println(plus);
+
 	}
 
-	static void init() {
-		answer.put(-1, 0);
-		answer.put(0, 0);
-		answer.put(1, 0);
-	}
+	private static void div(int[][] paper, int x, int y, int size) {
 
-	static void solve(int[][] arr, int si, int sj, int size) {
-		// System.out.println("재귀 시작!!");
-		// System.out.println("si = " + si + " sj = " + sj + " size = " + size);
-		boolean flag = false;
-		int number = arr[si][sj];
-		for (int i = si; i < si + size; i++) {
-			// System.out.println("i = " + i);
-			for (int j = sj; j < sj + size; j++) {
-				// System.out.println("j = " + j);
-				if (number != arr[i][j]) {
-					flag = true;
-					break;
-				}
+		if (isSame(paper, x, y, size)) {
+			if (paper[x][y] == -1) {
+				minus++;
 			}
-			if (flag) {
-				break;
-			}
-		}
 
-		if (flag) {
-			int nextSize = size / 3;
-			for (int i = 0; i < 3; i++) {
-				for (int j = 0; j < 3; j++) {
-					solve(arr, si + (i * nextSize), sj + (j * nextSize), nextSize);
-				}
+			if (paper[x][y] == 0) {
+				zero++;
+			}
+
+			if (paper[x][y] == 1) {
+				plus++;
 			}
 		} else {
-			answer.put(arr[si][sj], answer.get(arr[si][sj]) + 1);
+			int volume = size / 3;
+
+			for (int i = 0; i < 3; i++) {
+				for (int j = 0; j < 3; j++) {
+					div(paper, x + volume * i, y + volume * j, volume);
+				}
+			}
 		}
+	}
+
+	private static boolean isSame(int[][] paper, int x, int y, int size) {
+
+		int num = paper[x][y];
+		for (int i = x; i < x + size; i++) {
+			for (int j = y; j < y + size; j++) {
+				if (paper[i][j] != num) {
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 }
