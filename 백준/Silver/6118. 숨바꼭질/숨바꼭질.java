@@ -31,7 +31,7 @@ public class Main {
 
 		int N = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
-		
+
 		graph = new ArrayList<>();
 		visited = new boolean[N + 1];
 		dist = new int[N + 1];
@@ -69,14 +69,12 @@ public class Main {
 
 		Queue<Integer> queue = new LinkedList<>();
 		queue.offer(start);
+		visited[start] = true;
 
 		while (!queue.isEmpty()) {
 
-			// System.out.println("queue = " + queue);
-
 			int now = queue.poll();
 
-			visited[now] = true;
 			if (dist[now] > maxDist) {
 				maxDist = dist[now];
 				count = 1;
@@ -90,7 +88,6 @@ public class Main {
 				int next = graph.get(now).get(i);
 
 				if (!visited[next]) {
-					// System.out.println("next = " + next);
 					visited[next] = true;
 					queue.offer(next);
 					dist[next] = dist[now] + 1;
