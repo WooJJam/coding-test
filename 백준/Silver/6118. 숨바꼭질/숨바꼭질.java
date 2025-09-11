@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
+import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -30,7 +31,7 @@ public class Main {
 
 		int N = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
-
+		
 		graph = new ArrayList<>();
 		visited = new boolean[N + 1];
 		dist = new int[N + 1];
@@ -47,10 +48,6 @@ public class Main {
 			graph.get(ai).add(bi);
 			graph.get(bi).add(ai);
 
-		}
-
-		for (int i = 0; i < N + 1; i++) {
-			graph.get(i).sort(Comparator.naturalOrder());
 		}
 
 		// for (int i = 0; i < N + 1; i++) {
