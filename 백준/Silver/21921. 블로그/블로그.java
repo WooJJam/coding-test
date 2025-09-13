@@ -1,58 +1,77 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
+import java.util.StringTokenizer;
 
 public class Main {
 
 	public static void main(String[] args) throws IOException {
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st;
 
 		st = new StringTokenizer(br.readLine());
 
-		int N = 0;
-		int X = 0;
+		int N = Integer.parseInt(st.nextToken());
+		int X = Integer.parseInt(st.nextToken());
 
-		while(st.hasMoreTokens()) {
-			N = Integer.parseInt(st.nextToken());
-			X = Integer.parseInt(st.nextToken());
-		}
+		int[] visitor = new int[N + 1];
 
-		int[] visitor = new int[N];
-		int[] sum = new int[N+1];
+		st = new StringTokenizer(br.readLine());
 
-		String[] input = br.readLine().split(" ");
+		visitor[0] = 0;
 
-		for (int i = 0; i < N; i++) {
-			visitor[i] = Integer.parseInt(input[i]);
-		}
-
-		sum[0] = 0;
 		for (int i = 1; i <= N; i++) {
-			sum[i] = sum[i-1] + visitor[i-1];
+			visitor[i] = Integer.parseInt(st.nextToken());
 		}
 
-		int max = 0;
-		int count = 0;
+		sum(visitor, N);
+		solve(visitor, N, X);
+	}
+
+	private static void sum(int[] visitor, int N) {
+
+		for (int i = 1; i <= N; i++) {
+			visitor[i] = visitor[i-1] + visitor[i];
+		}
+	}
+
+	/*
+	0 1 2 3  4  5
+	0 1 5 7 12 13
+
+	2 ~ 5
+
+	2 - 0 -> 5
+	3 - 1 -> 6
+	4 - 2 -> 7
+	5 - 3 -> 6
+	 */
+	private static void solve(int[] visitor, int N, int X) {
+
+		int maxVisitor = 0;
+		int period = 0;
+
+		for (int i = X; i <= N; i++) {
+			int count = visitor[i] - visitor[i-X];
+
+			if (count > maxVisitor) {
+				maxVisitor = count;
+				period = 1;
+			} else if(count == maxVisitor) {
+				period += 1;
+			}
+		}
 		
-		for (int i = 0; i + X <= N; i++) {
-			int result = sum[i + X] - sum[i];
-
-			if (max != 0 && max == result) {
-				count ++;
-			}
-
-			if (max < result) {
-				max = result;
-				count = 1;
-			}
-		}
-
-		if (max == 0) {
-			System.out.print("SAD");
+		if (maxVisitor == 0) {
+			System.out.println("SAD");
 		} else {
-			System.out.println(max);
-			System.out.print(count);
+			System.out.println(maxVisitor);
+			System.out.println(period);
 		}
 	}
 }
