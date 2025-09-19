@@ -18,35 +18,33 @@ public class Main {
 		st = new StringTokenizer(br.readLine());
 
 		String s = st.nextToken();
+		int answer = s.length();
 
-		find(s);
+		for (int i = 0; i < s.length(); i++) {
+			if (find(s.substring(i))) {
+				break;
+			}
+
+			answer ++;
+		}
+
+		System.out.println(answer);
 	}
 
-	private static void find(String s) {
+	private static boolean find(String s) {
 
 		int left = 0;
-		int start = left;
 		int right = s.length() - 1;
-		boolean check = false;
 
 		while(left < right) {
 			if (s.charAt(left) != s.charAt(right)) {
-				start++;
-				left = start;
-				right = s.length() - 1;
-				check = false;
-				continue;
+				return false;
 			}
 
 			left++;
 			right--;
-			check = true;
 		}
 
-		if (check) {
-			System.out.println(s.length() + start);
-		} else {
-			System.out.println(s.length() * 2 - 1);
-		}
+		return true;
 	}
 }
