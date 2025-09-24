@@ -26,9 +26,11 @@ public class Main {
 			char alpha = st.nextToken().charAt(0);
 			int l = Integer.parseInt(st.nextToken());
 			int r = Integer.parseInt(st.nextToken());
-
-			solve(alpha, l, r, sum);
+			
+			bw.write(sum[alpha - 'a'][r + 1] - sum[alpha - 'a'][l] + "\n");
 		}
+
+		bw.flush();
 	}
 
 	private static void prefixSum(String S, int[][] sum) {
@@ -45,10 +47,4 @@ public class Main {
 			}
 		}
 	}
-
-	private static void solve(char alpha, int l, int r, int[][] sum) {
-		
-		System.out.println(sum[alpha - 'a'][r + 1] - sum[alpha - 'a'][l]);
-	}
 }
-
