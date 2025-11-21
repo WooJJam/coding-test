@@ -4,33 +4,26 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.PriorityQueue;
+import java.util.Deque;
 import java.util.StringTokenizer;
-
 
 public class Main {
 
 	static int[][] miro;
 	static int[][] distance;
-	static boolean[][] visited;
+
 	static int[] dx = {-1, 0, 1, 0};
 	static int[] dy = {0, 1, 0, -1};
 
-	static class Node implements Comparable<Node> {
+	static class Node {
 		int i;
 		int j;
-		int c;
 
-		@Override
-		public int compareTo(Node node) {
-			return this.c - node.c;
-		}
-
-		public Node(int i, int j, int c) {
+		public Node(int i, int j) {
 			this.i = i;
 			this.j = j;
-			this.c = c;
 		}
 	}
 
@@ -47,51 +40,82 @@ public class Main {
 
 		miro = new int[M][N];
 		distance = new int[M][N];
-		visited = new boolean[M][N];
 
-		for(int i = 0; i < M; i++) {
+		for (int i = 0; i < M; i++) {
 			String line = br.readLine();
 			Arrays.fill(distance[i], Integer.MAX_VALUE);
 
-			for(int j = 0; j < N; j++) {
+			for (int j = 0; j < N; j++) {
 				miro[i][j] = line.charAt(j) - '0';
 			}
 		}
 
-		dijkstra(N, M);
+		zeroOneBfs(N, M);
+
 	}
 
-	static void dijkstra(int N, int M) {
-		PriorityQueue<Node> pq = new PriorityQueue<Node>();
+	static void zeroOneBfs(int N, int M) {
+		Deque<Node> dq = new ArrayDeque<Node>();
 
-		pq.offer(new Node(0, 0, 0));
+		dq.addFirst(new Node(0, 0));
 		distance[0][0] = 0;
 
-		while(!pq.isEmpty()) {
+		while (!dq.isEmpty()) {
 
-			Node now = pq.poll();
+			Node now = dq.pollFirst();
 			int nowI = now.i;
 			int nowJ = now.j;
 
-			if (visited[nowI][nowJ]) {
-				continue;
-			}
-
-			visited[nowI][nowJ] = true;
-
 			for (int i = 0; i < 4; i++) {
-				int nextX = dx[i] + nowI;
-				int nextY = dy[i] + nowJ;
+				int nextX = nowI + dx[i];
+				int nextY = nowJ + dy[i];
 
-				if (0 <= nextX && nextX < M && 0 <= nextY && nextY < N && !visited[nextX][nextY]) {
-					if (distance[nextX][nextY] > distance[nowI][nowJ] + miro[nextX][nextY]) {
-						distance[nextX][nextY] = distance[nowI][nowJ] + miro[nextX][nextY];
-						pq.offer(new Node(nextX, nextY, distance[nextX][nextY]));
+				if (0 <= nextX && nextX < M && 0 <= nextY && nextY < N) {
+					if (miro[nextX][nextY] == 1 && distance[nextX][nextY] > distance[nowI][nowJ] + 1) {
+						distance[nextX][nextY] = distance[nowI][nowJ] + 1;
+						dq.addLast(new Node(nextX, nextY));
+					}
+
+					if (miro[nextX][nextY] == 0 && distance[nextX][nextY] > distance[nowI][nowJ]) {
+						distance[nextX][nextY] = distance[nowI][nowJ];
+						dq.addFirst(new Node(nextX, nextY));
 					}
 				}
 			}
 		}
 
-		System.out.println(distance[M-1][N-1]);
+		System.out.println(distance[M - 1][N - 1]);
 	}
+
+	// static void dijkstra(int N, int M) {
+	// 	PriorityQueue<Node> pq = new PriorityQueue<Node>();
+	//
+	// 	pq.offer(new Node(0, 0, 0));
+	// 	distance[0][0] = 0;
+	//
+	// 	while (!pq.isEmpty()) {
+	//
+	// 		Node now = pq.poll();
+	// 		int nowI = now.i;
+	// 		int nowJ = now.j;
+	// 		int nowC = now.c;
+	//
+	// 		if (distance[nowI][nowJ] < nowC) {
+	// 			continue;
+	// 		}
+	//
+	// 		for (int i = 0; i < 4; i++) {
+	// 			int nextX = dx[i] + nowI;
+	// 			int nextY = dy[i] + nowJ;
+	//
+	// 			if (0 <= nextX && nextX < M && 0 <= nextY && nextY < N) {
+	// 				if (distance[nextX][nextY] > distance[nowI][nowJ] + miro[nextX][nextY]) {
+	// 					distance[nextX][nextY] = distance[nowI][nowJ] + miro[nextX][nextY];
+	// 					pq.offer(new Node(nextX, nextY, distance[nextX][nextY]));
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// 	System.out.println(distance[M - 1][N - 1]);
+	// }
 }
