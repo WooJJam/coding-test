@@ -70,14 +70,18 @@ public class Main {
 				int nextX = nowI + dx[i];
 				int nextY = nowJ + dy[i];
 
-				if (0 <= nextX && nextX < M && 0 <= nextY && nextY < N) {
-					if (miro[nextX][nextY] == 1 && distance[nextX][nextY] > distance[nowI][nowJ] + 1) {
-						distance[nextX][nextY] = distance[nowI][nowJ] + 1;
-						dq.addLast(new Node(nextX, nextY));
-					}
+				if (0 > nextX || M <= nextX || 0 > nextY || N <= nextY) {
+					continue;
+				}
 
-					if (miro[nextX][nextY] == 0 && distance[nextX][nextY] > distance[nowI][nowJ]) {
-						distance[nextX][nextY] = distance[nowI][nowJ];
+				int nextC = distance[nowI][nowJ] + miro[nextX][nextY];
+
+				if (distance[nextX][nextY] > nextC) {
+					distance[nextX][nextY] = nextC;
+
+					if (miro[nextX][nextY] == 1) {
+						dq.addLast(new Node(nextX, nextY));
+					} else {
 						dq.addFirst(new Node(nextX, nextY));
 					}
 				}
