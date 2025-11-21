@@ -84,16 +84,10 @@ public class Main {
 				int nextY = dy[i] + nowJ;
 
 				if (0 <= nextX && nextX < M && 0 <= nextY && nextY < N && !visited[nextX][nextY]) {
-					if (miro[nextX][nextY] == 1) {
-						if (distance[nextX][nextY] > distance[nowI][nowJ] + 1) {
-							distance[nextX][nextY] = distance[nowI][nowJ] + 1;
-							pq.offer(new Node(nextX, nextY, distance[nextX][nextY]));
-						}
-					} else {
-						distance[nextX][nextY] = distance[nowI][nowJ];
+					if (distance[nextX][nextY] > distance[nowI][nowJ] + miro[nextX][nextY]) {
+						distance[nextX][nextY] = distance[nowI][nowJ] + miro[nextX][nextY];
+						pq.offer(new Node(nextX, nextY, distance[nextX][nextY]));
 					}
-
-					pq.offer(new Node(nextX, nextY, distance[nextX][nextY]));
 				}
 			}
 		}
