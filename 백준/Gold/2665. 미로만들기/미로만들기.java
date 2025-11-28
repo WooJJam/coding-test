@@ -20,6 +20,11 @@ public class Main {
 			this.cost = cost;
 		}
 
+		public Node(final int x, final int y) {
+			this.x = x;
+			this.y = y;
+		}
+
 		@Override
 		public int compareTo(Node n) {
 			return this.cost - n.cost;
@@ -36,13 +41,13 @@ public class Main {
 		visited = new boolean[N][N];
 		distance = new int[N][N];
 
-		for(int i = 0; i < N; i++) {
+		for (int i = 0; i < N; i++) {
 			String line = br.readLine();
 			Arrays.fill(distance[i], Integer.MAX_VALUE);
 
-			for(int j = 0; j < N; j++) {
+			for (int j = 0; j < N; j++) {
 				char c = line.charAt(j);
-				if(c == '1') {
+				if (c == '1') {
 					graph[i][j] = 0;
 				} else {
 					graph[i][j] = 1;
@@ -50,25 +55,24 @@ public class Main {
 			}
 		}
 
-		dijkstra(N, 0, 0);
-
+		// dijkstra(N, 0, 0);
+		zeroOneBfs(N, 0, 0);
 
 	}
 
-	private static void dijkstra(int N, int sx, int sy) {
+	private static void zeroOneBfs(int N, int sx, int sy) {
+		ArrayDeque<Node> dq = new ArrayDeque<>();
 
-		PriorityQueue<Node> pq = new PriorityQueue<Node>();
-		pq.offer(new Node(sx, sy, 0));
+		dq.offerFirst(new Node(sx, sy));
 		distance[sx][sy] = 0;
 
-		while(!pq.isEmpty()) {
+		while (!dq.isEmpty()) {
 
-			Node now = pq.poll();
+			Node now = dq.pollFirst();
 			int nowX = now.x;
 			int nowY = now.y;
-			int nowC = now.cost;
 
-			if(visited[nowX][nowY]) {
+			if (visited[nowX][nowY]) {
 				continue;
 			}
 
@@ -84,7 +88,12 @@ public class Main {
 
 				if (distance[nextX][nextY] > distance[nowX][nowY] + graph[nextX][nextY]) {
 					distance[nextX][nextY] = distance[nowX][nowY] + graph[nextX][nextY];
-					pq.offer(new Node(nextX, nextY, distance[nextX][nextY]));
+
+					if (graph[nextX][nextY] == 0) {
+						dq.offerFirst(new Node(nextX, nextY));
+					} else {
+						dq.offerLast(new Node(nextX, nextY));
+					}
 				}
 			}
 		}
