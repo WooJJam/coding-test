@@ -1,4 +1,4 @@
-select pt_name, pt_no, gend_cd, age, ifnull(tlno, 'NONE') 
+select pt_name, pt_no, gend_cd, age, coalesce(tlno, 'NONE') tlno
 from patient
 where age <= 12
 and gend_cd = 'W'
