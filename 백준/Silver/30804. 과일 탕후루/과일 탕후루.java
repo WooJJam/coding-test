@@ -1,67 +1,72 @@
-import java.security.Key;
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.StringTokenizer;
 
 public class Main {
 
-	static int[] fruits = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-	static int answer = 0;
+	static int[] fruitCount;
 
 	public static void main(String[] args) throws IOException {
-
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st;
 
-		ArrayList<Integer> input = new ArrayList<>();
 		int N = Integer.parseInt(br.readLine());
+		int[] fruits = new int[N];
+		fruitCount = new int[N + 1];
 
 		st = new StringTokenizer(br.readLine());
-		while (st.hasMoreTokens()) {
-			input.add(Integer.parseInt(st.nextToken()));
+		for (int i = 0; i < N; i++) {
+			int f = Integer.parseInt(st.nextToken());
+			fruits[i] = f;
 		}
 
-		if (N == 1 || N == 2) {
-			bw.write(N + "\n");
+		if (N == 1) {
+			System.out.println(1);
 		} else {
-			int kind = 1;
-			int left = 0;
-			int right = 1;
-
-			fruits[input.get(left)] += 1;
-
-			solve(N, input, left, right, kind);
-			bw.write(answer + "\n");
+			solve(N, fruits);
 		}
 
-		bw.flush();
-		bw.close();
 	}
 
-	static void solve(int N, ArrayList<Integer> input, int left, int right, int kind) {
-		int total = 1;
-		Set<Integer> set = new HashSet<>();
-		set.add(input.get(left));
+	static void solve(int N, int[] fruits) {
+		int start = 0;
+		int end = start + 1;
+		int answer = 1;
+		fruitCount[fruits[0]] = 1;
 
-		while (right < N) {
-			set.add(input.get(right));
+		int totalCount = 1;
 
-			if (set.size() > 2) {
-				while (set.size() > 2) {
-					int leftFruit = --fruits[input.get(left)];
-					if (leftFruit == 0) {
-						set.remove(input.get(left));
-					}
-					left++;
-					total--;
-				}
-			} else {
-				++fruits[input.get(right)];
-				total++;
-				right++;
+		while(start <= end && end < N) {
+
+			int first = fruits[start]; // 5
+			int last = fruits[end]; // 2
+
+			if (fruitCount[last] == 0) {
+				totalCount += 1;
 			}
 
-			answer = Math.max(answer, total);
+			if (totalCount > 2) {
+				fruitCount[first] -= 1;
+
+				if (fruitCount[first] == 0) {
+					totalCount -= 2;
+				} else {
+					totalCount -= 1;
+				}
+				start++;
+			} else {
+				answer = Math.max(answer, end - start + 1);
+
+				fruitCount[last] += 1;
+				end++;
+			}
+
 		}
+
+		System.out.println(answer);
 	}
 }
