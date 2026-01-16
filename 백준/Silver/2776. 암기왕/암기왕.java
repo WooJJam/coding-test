@@ -16,18 +16,18 @@ public class Main {
 		int T = Integer.parseInt(br.readLine());
 		for (int i = 0; i < T; i++) {
 			int N = Integer.parseInt(br.readLine());
-			HashSet<Integer> note = new HashSet<>();
+			HashMap<Integer, Boolean> note = new HashMap();
 
 			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < N; j++) {
-				note.add(Integer.parseInt(st.nextToken()));
+				note.put(Integer.parseInt(st.nextToken()), true);
 			}
 
 			int M = Integer.parseInt(br.readLine());
 			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < M; j++) {
 				int number = Integer.parseInt(st.nextToken());
-				if (note.contains(number)) {
+				if (note.containsKey(number)) {
 					bw.write("1\n");
 				} else {
 					bw.write("0\n");
