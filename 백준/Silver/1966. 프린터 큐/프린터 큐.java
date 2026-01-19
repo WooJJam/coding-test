@@ -1,8 +1,6 @@
 import java.io.*;
 import java.util.*;
 
-import org.w3c.dom.Node;
-
 public class Main {
 
 	public static void main(String[] args) throws IOException {
@@ -30,27 +28,24 @@ public class Main {
 
 	private static void solve(int N, int M, int[] weight) {
 		PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.reverseOrder());
-		Deque<Node> dq = new ArrayDeque<>();
+
+		Queue<Node> q = new LinkedList<>();
 
 		for (int i = 0; i < N; i++) {
 			pq.offer(weight[i]);
-			dq.add(new Node(i, weight[i]));
+			q.add(new Node(i, weight[i]));
 		}
-
-		// System.out.println(dq);
 
 		int answer = 1;
 		boolean flag = false;
+
 		while (!pq.isEmpty()) {
 			int num = pq.poll();
 
-			while(!dq.isEmpty()) {
-				Node node = dq.pollFirst();
+			while(!q.isEmpty()) {
+				Node node = q.poll();
 				int index = node.index;
 				int value = node.value;
-
-				// System.out.printf("num = %d\n", num);
-				// System.out.printf("index = %d, value = %d\n", index, value);
 
 				if (num == value) {
 					if (index == M) {
@@ -58,7 +53,7 @@ public class Main {
 					}
 					break;
 				} else {
-					dq.addLast(node);
+					q.add(node);
 				}
 
 			}
@@ -81,36 +76,5 @@ public class Main {
 			this.value = value;
 		}
 
-		// @Override
-		// public int compareTo(Node n) {
-		// 	// if (n.value == this.value) {
-		// 	// 	return this.index - n.index;
-		// 	// }
-		// 	return n.value - this.value;
-		// }
-
-		@Override
-		public String toString() {
-			return "Node{" +
-				"index=" + index +
-				", value=" + value +
-				'}';
-		}
 	}
 }
-
-/*
-1
-6 3
-1 1 9 1 1 1
--- > 2
-
-deque = 1, 1, 9, 1, 1, 1
-pq = 9, 1, 1, 1, 1, 1
-
-가중치 == 9
-(2,9) (3,1) (4,1) (5,1), (0,1), (1,1)
-
-가중치 == 1
-(3,1) (4,1) (5,1), (0,1), (1,1)
- */
