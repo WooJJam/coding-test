@@ -5,60 +5,51 @@ public class Main {
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		StringTokenizer st;
-
 		String S = br.readLine();
 		solve(S);
 	}
 
 	private static void solve(String S) {
+		StringBuilder out = new StringBuilder();
 		Stack<Character> stack = new Stack<>();
-		boolean flag = false;
+		boolean isTag = false;
 
 		for (int i = 0; i < S.length(); i++) {
 			char c = S.charAt(i);
 
 			if (c == '<') {
-				if (!stack.isEmpty()) {
-					reverse(stack);
-				}
-				flag = true;
-				System.out.print(c);
+				reverse(stack, out);
+				isTag = true;
+				out.append(c);
 				continue;
 			}
 
 			if (c == '>') {
-				flag = false;
-				System.out.print(c);
+				isTag = false;
+				out.append(c);
 				continue;
 			}
 
-			if (flag) {
-				System.out.print(c);
-			}
-
-			if (!flag) {
+			if (isTag) {
+				out.append(c);
+			} else {
 				if (c == ' ') {
-					reverse(stack);
-					System.out.print(' ');
+					reverse(stack, out);
+					out.append(c);
 				} else {
 					stack.push(c);
 				}
-
 			}
 		}
-
-		if (!stack.isEmpty()) {
-			reverse(stack);
-		}
+		reverse(stack, out);
+		System.out.println(out);
 	}
 
-	private static void reverse(Stack<Character> stack) {
+	private static void reverse(Stack<Character> stack, StringBuilder out) {
 
 		while (!stack.isEmpty()) {
 			Character word = stack.pop();
-			System.out.print(word);
+			out.append(word);
 		}
 	}
 }
