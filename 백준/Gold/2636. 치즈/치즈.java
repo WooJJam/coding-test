@@ -74,13 +74,13 @@ public class Main {
 
 	// 0,0애서 외부 공기와 맞닿은 치즈 찾기
 	private static int bfs(int N, int M, int x, int y) {
-		Queue<int[]> q = new LinkedList<>();
-		q.offer(new int[]{x, y});
+		Queue<Integer> q = new LinkedList<>();
+		q.offer(x * M + y);
 
 		while(!q.isEmpty()) {
-			int[] pos = q.poll();
-			int curX = pos[0];
-			int curY = pos[1];
+			int pos = q.poll();
+			int curX = pos / M;
+			int curY = pos % M;
 			visited[curX][curY] = true;
 
 			for (int i = 0; i < 4; i++) {
@@ -91,7 +91,7 @@ public class Main {
 					visited[nextX][nextY] = true;
 					// 다음 위치가 공기인 경우
 					if(maps[nextX][nextY] == 0) {
-						q.offer(new int[] {nextX, nextY});
+						q.offer(nextX * M + nextY);
 					} else { // 다음 위치가 치즈인 경우
 						maps[nextX][nextY] = -1;
 					}
