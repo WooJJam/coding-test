@@ -20,7 +20,7 @@ input:
  */
 
 public class Main {
-	
+
 	static int[][] maps;
 	static int[] dx = {-1, 0, 1, 0};
 	static int[] dy = {0, 1, 0, -1};
@@ -59,13 +59,13 @@ public class Main {
 
 		while(true) {
 			visited = new boolean[N][M];
-			int cnt = bfs(N, M, x, y);
+			int meltedCnt = bfs(N, M, x, y);
 
-			if (cnt == 0) {
+			if (meltedCnt == 0) {
 				break;
 			}
 
-			answer = cnt;
+			answer = meltedCnt;
 			time++;
 		}
 
@@ -74,13 +74,14 @@ public class Main {
 
 	// 0,0애서 외부 공기와 맞닿은 치즈 찾기
 	private static int bfs(int N, int M, int x, int y) {
-		Queue<Integer> q = new LinkedList<>();
-		q.offer(x * M + y);
+		Queue<int[]> q = new LinkedList<>();
+		int melted = 0;
+		q.offer(new int[]{x, y});
 
 		while(!q.isEmpty()) {
-			int pos = q.poll();
-			int curX = pos / M;
-			int curY = pos % M;
+			int[] pos = q.poll();
+			int curX = pos[0];
+			int curY = pos[1];
 			visited[curX][curY] = true;
 
 			for (int i = 0; i < 4; i++) {
@@ -91,16 +92,17 @@ public class Main {
 					visited[nextX][nextY] = true;
 					// 다음 위치가 공기인 경우
 					if(maps[nextX][nextY] == 0) {
-						q.offer(nextX * M + nextY);
+						q.offer(new int[] {nextX, nextY});
 					} else { // 다음 위치가 치즈인 경우
-						maps[nextX][nextY] = -1;
+						maps[nextX][nextY] = 0;
+						melted ++;
 					}
 				}
 			}
 
 		}
 
-		return melt(N, M);
+		return melted;
 	}
 
 	private static int melt(int N, int M) {
