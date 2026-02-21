@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	
+
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -18,19 +18,25 @@ public class Main {
 
 	private static int solve(int N, int K) {
 
-		int num = 0;
-		while(true) {
-			
-			int cnt = Integer.bitCount(N + num);
+		int answer = 0;
+		while(Integer.bitCount(N) > K) {
 
-			if (cnt <= K) {
-				break;
-			}
-
-			num++;
+			int idx;
+			String binary = Integer.toBinaryString(N);
+			// for (int i = binary.length() - 1; i >= 0; i--) {
+			// 	if (binary.charAt(i) == '1') {
+			// 		idx = i;
+			// 		break;
+			// 	}
+			// }
+			// System.out.println(idx);
+			idx = Integer.numberOfTrailingZeros(N);
+			int add = 1 << idx;
+			N += add;
+			answer += add;
 		}
 
-		return num;
+		return answer;
 
 	}
 }
