@@ -9,22 +9,22 @@ public class Main {
 		StringTokenizer st;
 
 		st = new StringTokenizer(br.readLine());
-		String L = st.nextToken();
-		String R = st.nextToken();
+		char[] L = st.nextToken().toCharArray();
+		char[] R = st.nextToken().toCharArray();
 
 		System.out.println(solve(L, R));
 	}
 
-	private static int solve(String L, String R) {
+	private static int solve(char[] L, char[] R) {
 
 		int count = 0;
-		if (L.length() != R.length()) {
+		if (L.length != R.length) {
 			return count;
 		}
 
-		for (int i = 0; i < L.length(); i++) {
-			if (L.charAt(i) == R.charAt(i)) {
-				if (L.charAt(i) == '8' && R.charAt(i) == '8') {
+		for (int i = 0; i < L.length; i++) {
+			if (L[i] == R[i]) {
+				if (L[i] == '8') {
 					count++;
 				}
 			} else {
