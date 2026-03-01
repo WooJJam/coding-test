@@ -1,53 +1,39 @@
 import java.io.*;
-import java.util.*;
 
 public class Main {
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		StringTokenizer st;
 
 		int T = Integer.parseInt(br.readLine());
 
 		for (int i = 0; i < T; i++) {
 			String words = br.readLine();
-			int answer = solve(words);
+			int answer = solve(words, 0, words.length() -1, 0);
 			System.out.println(answer);
 		}
 	}
 
-	private static int solve(String words) {
-
-		int left = 0;
-		int right = words.length() - 1;
+	private static int solve(String words, int left, int right, int count) {
 
 		while (left <= right) {
 			if (words.charAt(left) == words.charAt(right)) {
 				left++;
 				right--;
 			} else {
-				if (compare(words, left + 1, right) || compare(words, left, right - 1)) { // 둘중에 하나라도 true이면 유사
-					return 1;
-				} else {
+				if (count >= 1) {
 					return 2;
 				}
-			}
-		}
-		return 0;
-	}
 
-	private static boolean compare(String words, int left, int right) {
+				count++;
 
-		while (left <= right) {
-			if (words.charAt(left) == words.charAt(right)) {
-				left++;
-				right--;
-			} else {
-				return false;
+				int leftDeleted = solve(words, left + 1, right, count);
+				int rightDeleted = solve(words, left, right - 1, count);
+
+				return Math.min(leftDeleted, rightDeleted);
 			}
 		}
 
-		return true;
+		return count;
 	}
 }
