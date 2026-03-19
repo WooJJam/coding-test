@@ -1,14 +1,19 @@
 import java.io.*;
 import java.util.*;
 
-import com.sun.jdi.IntegerType;
-
 public class Main {
 
 	static int[][] maps;
 	static int[] dx = {1, 0};
 	static int[] dy = {0, 1};
 	// 0이 아래, 1이 오른쪽
+
+	/*
+	조건 1: 경사로는 낮은 칸에 놓을 수 있다.
+	조건 2: L개의 연속된 칸에 접해야한다.
+	조건 3: 낮은 칸과 높은 칸의 차이는 1
+	조건 4: 이미 설치한 칸에는 설치가 불가능
+	 */
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -38,11 +43,15 @@ public class Main {
 
 		int answer = 0;
 		for (int i = 0; i < N; i++) {
-			if (search(N, L, 0, i, 0)) {
+			boolean[][] visited = new boolean[N][N];
+			if (search(N, L, visited, 0, i, 0)) {
 				answer++;
 			}
+		}
 
-			if (search(N, L, i, 0, 1)) {
+		for (int i = 0; i < N; i++) {
+			boolean[][] visited = new boolean[N][N];
+			if (search(N, L, visited, i, 0, 1)) {
 				answer++;
 			}
 		}
@@ -50,90 +59,78 @@ public class Main {
 		return answer;
 	}
 
-	// dir = 0 아래, dir = 1 오른쪽
-	/*
-	아래이면..
-	(1,0), (2,0) ... y가 고정이다.
+	private static boolean search(int N, int L, boolean[][] visited, int x, int y, int dir) {
 
-	오른쪽이면
-	(0,1), (0,2) ... x가 고정이다.
-	 */
-	private static boolean search(int N, int L, int x, int y, int dir) {
+		for (int i = 0; i < N; i++) {
 
-		int count = 1;
-		boolean isValid = true;
-
-		while (true) {
-			int nextX = dx[dir] + x;
-			int nextY = dy[dir] + y;
+			int nextX = x + dx[dir];
+			int nextY = y + dy[dir];
 
 			if (0 <= nextX && nextX < N && 0 <= nextY && nextY < N) {
+				// 차이가 2보다 크다면 false
 				if (Math.abs(maps[x][y] - maps[nextX][nextY]) >= 2) {
-					isValid = false;
-					break;
+					return false;
 				}
 
-				if (maps[x][y] == maps[nextX][nextY]) {
-					count++;
-
-					if (dir == 0) {
-						x = nextX;
-					} else {
-						y = nextY;
+				else if (maps[x][y] < maps[nextX][nextY]) {
+					if (!prevSearch(N, L, visited, i, x, y, dir)) {
+						return false;
 					}
-				} else if (maps[x][y] < maps[nextX][nextY]) {
-					if (count < L) {
-						isValid = false;
-						break;
-					}
-
-					count = 1;
-
-					if (dir == 0) {
-						x = nextX;
-					} else {
-						y = nextY;
-					}
-
-				} else if (maps[x][y] > maps[nextX][nextY]) {
-					if (!search2(L, N, x, y, dir, maps[nextX][nextY])) {
-						isValid = false;
-						break;
-					}
-
-					count = 0;
-
-					if (dir == 0) {
-						x = nextX + L - 1;
-					} else {
-						y = nextY + L - 1;
-					}
+					x = nextX;
+					y = nextY;
 				}
+				// 앞에가 더 크다면 다음 칸부터 쭉 탐색
+				else if (maps[x][y] > maps[nextX][nextY]) {
+					if (!nextSearch(N, L, visited, i, nextX, nextY, dir)) {
+						return false;
+					}
 
-			} else {
-				break;
+					if (dir == 0) {
+						x += L;
+					} else {
+						y += L;
+					}
+				} else {
+					x = nextX;
+					y = nextY;
+				}
 			}
 		}
 
-		return isValid;
+		return true;
 	}
 
-	private static boolean search2(int L, int N, int x, int y, int dir, int target) {
+	private static boolean prevSearch(int N, int L, boolean[][] visited, int i, int prevX, int prevY,
+		int dir) {
 
-		int nextX = x;
-		int nextY = y;
+		int target = maps[prevX][prevY];
 
-		int count = 0;
-		while(count != L) {
+		for (int j = 0; j < L; j++) {
 
-			nextX += dx[dir];
-			nextY += dy[dir];
+			if (0 <= prevX && prevX < N && 0 <= prevY && prevY < N && target == maps[prevX][prevY]
+				&& !visited[prevX][prevY]) {
+				visited[prevX][prevY] = true;
+				prevX -= dx[dir];
+				prevY -= dy[dir];
+			} else {
+				return false;
+			}
+		}
 
-			if (0 <= nextX && nextX < N && 0 <= nextY && nextY < N) {
-				if (target != maps[nextX][nextY]) {
-					return false;
-				}
-				count++;
+		return true;
+	}
+
+	private static boolean nextSearch(int N, int L, boolean[][] visited, int i, int nextX, int nextY,
+		int dir) {
+
+		int target = maps[nextX][nextY];
+
+		for (int j = 0; j < L; j++) {
+
+			if (0 <= nextX && nextX < N && 0 <= nextY && nextY < N && target == maps[nextX][nextY] && !visited[nextX][nextY]) {
+				visited[nextX][nextY] = true;
+				nextX += dx[dir];
+				nextY += dy[dir];
 			} else {
 				return false;
 			}
