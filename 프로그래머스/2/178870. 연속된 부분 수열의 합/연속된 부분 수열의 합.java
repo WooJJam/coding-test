@@ -2,37 +2,34 @@ import java.util.*;
 
 class Solution {
     public int[] solution(int[] sequence, int k) {
-        int[] answer = solve(sequence, k);
         
-        return answer;
+       return solve(sequence, k);
     }
     
     private static int[] solve(int[] sequence, int k) {
         
         int left = 0;
-        int right = 1;
+        int right = left + 1;
         
-        if (sequence[left] == k) {
+         if (sequence[left] == k) {
             return new int[] {left, left};
         }
         
-        long sum = sequence[left] + sequence[right];
+        int sum = sequence[left] + sequence[right];
         int min = 0;
         int max = 0;
         int size = Integer.MAX_VALUE;
      
-        /*
-        1 2 3, 4, 100  k = 100
-        */
         while(right < sequence.length && left <= right) {
         
-            // System.out.printf("left = %d, right = %d\n",left, right);
             
             if(sum < k) { // k가 더 크다면 right를 증가시키고, right 인덱스를 더하자.
                 right++;
+                
                 if (right < sequence.length) {
                     sum += sequence[right];
                 }
+                
             } else {
                 if (sum == k) { // k와 같다면 left를 증가시키고, 현재 배열의 길이와 left 인덱스의 값을 기록해놓자.
                     int curSize = right - left + 1;
@@ -41,9 +38,8 @@ class Solution {
                         min = left;
                         max = right;
                     }
-                    sum -= sequence[left];
-                    left++;
-                } 
+                    sum -= sequence[left++];
+                }
                 else { // sum이 더 크다면 left를 증가시키고
                     sum -= sequence[left++];
                 }
