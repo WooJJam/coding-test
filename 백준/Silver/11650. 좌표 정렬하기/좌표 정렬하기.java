@@ -56,7 +56,7 @@ public class Main {
 
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-		arr.sort(Comparator.naturalOrder());
+		Collections.sort(arr);
 
 		for (int i = 0; i < N; i++) {
 			bw.write(arr.get(i).x + " " + arr.get(i).y);
