@@ -1,5 +1,5 @@
 -- 코드를 입력하세요
-SELECT concat_ws('/', '/home/grep/src', ugb.board_id, concat(ufg.file_id, ufg.file_name, ufg.file_ext)) as FILE_PATH
+SELECT concat('/home/grep/src/', ugb.board_id, '/', ufg.file_id, ufg.file_name, ufg.file_ext) as FILE_PATH
 from used_goods_board ugb
 join used_goods_file ufg on ugb.board_id = ufg.board_id
 where ugb.views = (
