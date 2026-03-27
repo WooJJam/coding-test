@@ -12,7 +12,7 @@ public class Main {
 	3 3
 	 */
 
-	static class Node implements Comparable<Node> {
+	static class Node {
 		int x;
 		int y;
 
@@ -21,15 +21,15 @@ public class Main {
 			this.y = y;
 		}
 
-		@Override
-		public int compareTo(final Node n) {
-
-			if (this.x == n.x) {
-				return Integer.compare(this.y, n.y);
-			}
-
-			return Integer.compare(this.x, n.x);
-		}
+		// @Override
+		// public int compareTo(final Node n) {
+		//
+		// 	if (this.x == n.x) {
+		// 		return Integer.compare(this.y, n.y);
+		// 	}
+		//
+		// 	return Integer.compare(this.x, n.x);
+		// }
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -49,45 +49,22 @@ public class Main {
 		}
 
 		// sorted(list, N);
-		sortedV2(list2, N);
+		sortedV3(list2, N);
 	}
 
-	private static void sortedV2(ArrayList<Node> arr, int N) throws IOException {
+	private static void sortedV3(ArrayList<Node> arr, int N) throws IOException {
 
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-		Collections.sort(arr);
+		arr.sort((a, b) -> {
+			if (a.x == b.x) {
+				return Integer.compare(a.y, b.y);
+			}
+			return Integer.compare(a.x, b.x);
+		});
 
 		for (int i = 0; i < N; i++) {
 			bw.write(arr.get(i).x + " " + arr.get(i).y);
-			bw.write("\n");
-		}
-
-		bw.flush();
-		bw.close();
-
-	}
-
-	private static void sorted(Node[] arr, int N) throws IOException {
-
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
-		// a[0] -> x
-		// a[1] -> y
-		// Arrays.sort(arr, (a, b) -> {
-		// 	int cmp = Integer.compare(a[0], b[0]);
-		//
-		// 	if (cmp == 0) {
-		// 		return Integer.compare(a[1], b[1]);
-		// 	}
-		//
-		// 	return cmp;
-		// });
-
-		Arrays.sort(arr);
-
-		for (int i = 0; i < N; i++) {
-			bw.write(arr[i].x + " " + arr[i].y);
 			bw.write("\n");
 		}
 
