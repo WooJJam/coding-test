@@ -38,15 +38,34 @@ public class Main {
 
 		int N = Integer.parseInt(br.readLine());
 		Node[] list = new Node[N];
+		ArrayList<Node> list2 = new ArrayList<>();
 
 		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
 			int x = Integer.parseInt(st.nextToken());
 			int y = Integer.parseInt(st.nextToken());
-			list[i] = (new Node(x, y));
+			// list[i] = (new Node(x, y));
+			list2.add(new Node(x, y));
 		}
 
-		sorted(list, N);
+		// sorted(list, N);
+		sortedV2(list2, N);
+	}
+
+	private static void sortedV2(ArrayList<Node> arr, int N) throws IOException {
+
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+		arr.sort(Comparator.naturalOrder());
+
+		for (int i = 0; i < N; i++) {
+			bw.write(arr.get(i).x + " " + arr.get(i).y);
+			bw.write("\n");
+		}
+
+		bw.flush();
+		bw.close();
+
 	}
 
 	private static void sorted(Node[] arr, int N) throws IOException {
